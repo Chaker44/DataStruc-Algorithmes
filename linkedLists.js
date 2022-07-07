@@ -62,6 +62,8 @@ class LinkedList {
                 currentNode= currentNode.next ;
             let nodeToInsert = new Node(value);
             nodeToInsert.next = currentNode.next ;
+            currentNode.next.prev = nodeToInsert;
+            nodeToInsert.prev = currentNode;
             currentNode.next = nodeToInsert;
             this.length++;
         }
@@ -76,18 +78,32 @@ class LinkedList {
         }
         return array;
     }
+    printLinkedListAsString(){
+        let begin = this.head;
+        while (begin !== null){
+            if (begin.prev == null)
+                console.log("Value of node: "+ begin.value+", Value of prev node : null, Value of next node : "+begin.next.value);
+            else if(begin.next == null)
+                console.log("Value of node: "+ begin.value+", Value of prev node : "+begin.prev.value+", Value of next node : null ");
+            else 
+                console.log("Value of node: "+ begin.value+", Value of prev node : "+begin.prev.value+", Value of next node : "+begin.next.value);
+
+            begin = begin.next ;
+        }
+    }
     remove(index){
        if(index===0){
         this.head = this.head.next ; 
        }
        else{
         let currentNode = this.head;
-        for (let i = 0; i < index; i++) {
+        for (let i = 0; i < index-1; i++) {
             currentNode = currentNode.next ;
             
         }
         let nodeToDelete = currentNode.next ;
         currentNode.next = nodeToDelete.next ;
+        nodeToDelete.next.prev = currentNode;
         this.length--; 
        }
 
@@ -99,4 +115,7 @@ let myLinkedList = new LinkedList(190);
 myLinkedList.append(10);
 myLinkedList.append(11);
 myLinkedList.prepend(9);
-console.log(myLinkedList.printLinkedList());
+myLinkedList.insert(1,13); 
+myLinkedList.remove(2);
+// output : [9,13,190,10,11]
+console.log(myLinkedList.printLinkedListAsString());
